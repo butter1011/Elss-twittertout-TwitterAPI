@@ -135,7 +135,7 @@ export default function App() {
                     </Dropdown>
                     : <>
                         <Link href="/login" className="hidden sm:flex">
-                            <Button variant="bordered" className="border-black dark:border-white hover:scale-90 text-black dark:text-white">Login</Button>
+                            <Button variant="bordered" className="border-black dark:border-white hover:dark:bg-gray-700 hover:bg-gray-200 text-black dark:text-white">Login</Button>
                         </Link>
                     </>
                 }

@@ -37,7 +37,7 @@ const UserPage = () => {
   const tweetsPerPage = 10;
   const startIndex = (page - 1) * tweetsPerPage;
   const endIndex = startIndex + tweetsPerPage;
-  const currentUser = usersData.slice(startIndex, endIndex);
+  const currentUser = usersData?.slice(startIndex, endIndex);
 
   useEffect(() => {
     const getUserData = async function () {
@@ -113,7 +113,7 @@ const UserPage = () => {
         <div className="flex items-center space-x-64 text-[16px] text-black dark:text-white justify-center py-6">
           <div className='flex flex-col text-center p-4 gap-2'>
             <p className='text-5xl'>
-              <CountUp end={usersData.length} duration={2} />
+              <CountUp end={usersData?.length} duration={2} />
             </p>
             <p className='text-small'>Twitter Users</p>
           </div>
@@ -158,7 +158,7 @@ const UserPage = () => {
                 </svg>
               </div>
               :
-              usersData.length > 0 &&
+              usersData?.length > 0 &&
               <Table className="flex justify-end h-full" aria-label='UserTable' aria-labelledby='UserTable'>
                 <TableHeader columns={columns}>
                   {(column: any) => (

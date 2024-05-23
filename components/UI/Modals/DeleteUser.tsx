@@ -20,7 +20,7 @@ const DeleteUser = () => {
 
     const onDelete = async () => {
         setLoading(true);
-        axios.post("api/v1/delete", { del_user: isOpen })
+        axios.post("/api/v1/user/delete", { del_user: isOpen })
             .then((res) => {
                 if (res.data?.status === 404) {
                     toast.error(res.data?.message);

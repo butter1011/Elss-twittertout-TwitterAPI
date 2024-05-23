@@ -30,7 +30,7 @@ const AddUser = () => {
             return;
         }
 
-        axios.post("api/v1/user/add", { new_user: name })
+        axios.post("/api/v1/user/add", { new_user: name })
             .then((res) => {
                 if (res.data?.status === 401) {
                     toast.error(res.data?.message);
