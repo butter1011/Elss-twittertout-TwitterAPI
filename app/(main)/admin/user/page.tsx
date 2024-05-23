@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useAtom } from 'jotai';
 import { isAddOpen, isDeleteOpen } from '@/components/Jotai/modalAtoms';
 import { Divider } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
 
 const columns = [
   { name: "Name", uid: "name" },
@@ -139,12 +140,10 @@ const UserPage = () => {
               </div>
             </form>
             <div className='flex flex-row gap-2'>
-              <Button color="primary" className='text-[12px]' variant="shadow">
-                Twitter User
-              </Button>
-              <Button color="primary" className='text-[12px]' variant="shadow">
-                HomePage User
-              </Button>
+              <Tabs key={"full"} radius={"full"} aria-label="Tabs radius">
+                <Tab key="twitter" title="Twitter User" />
+                <Tab key="homepage" title="Home User" />
+              </Tabs>
               <Button color="secondary" className='text-[12px]' variant="shadow" startContent={<GoPlus size={18} />} onClick={() => setAddModalOpen(true)}>
                 Add user
               </Button>
