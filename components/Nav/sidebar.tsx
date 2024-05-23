@@ -9,7 +9,7 @@ const Sidebar = () => {
 
     return (
         <aside id="default-sidebar" className="flex left-0 z-20 transition-transform -translate-x-full sm:translate-x-0">
-            <div className="p-4 rounded-xl overflow-y-auto bg-gray-50 dark:bg-[#732CD8] w-64">
+            <div className="p-4 rounded-xl overflow-y-auto bg-white dark:bg-[#732CD8] w-64">
                 <ul className="space-y-2 font-medium">
                     <li>
                         <Link href="/admin/dashboard" className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${currentPath.includes("dashboard") ? "bg-gray-100 dark:bg-gray-700" : ""}`}>
