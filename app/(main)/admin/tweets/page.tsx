@@ -23,7 +23,6 @@ const columns = [
 
 const TweetsPage = () => {
   const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(1);
   const [, setDeleteModalOpen] = useAtom(isDeleteOpen);
   const [loading, setLoading] = useState<any>(false);
   const [tweetData, setTweetData] = useAtom(tweetsList);
@@ -33,7 +32,6 @@ const TweetsPage = () => {
   const tweetsPerPage = 10;
   const startIndex = (page - 1) * tweetsPerPage;
   const endIndex = startIndex + tweetsPerPage;
-  const pageTweet = tweetData?.slice(startIndex, endIndex);
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +39,6 @@ const TweetsPage = () => {
       await axios.post("/api/v2/tweets", { timeSort: false }).then((res) => {
         setTweetData(res.data.tweets);
         setTodayTweets(res.data.todayTweets);
-        setTotalPage(Math.ceil(res.data.tweets.length / 10));
         setLoading(false);
       });
     };
@@ -122,62 +119,99 @@ const TweetsPage = () => {
         </div>
       </div>
       <div className='flex flex-col gap-10 px-4'>
-        <div className='flex flex-row gap-6 justify-between px-2'>
-          <form className="w-[400px]">
-            <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-e vents-none">
-                <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+        <div className='flex flex-col justify-between px-2'>
+          {
+            loading ?
+              <div id="loading" className="flex justify-center items-center align-middle">
+                <svg viewBox="50 50 100 100" style={{ width: '5rem' }}>
+                  <circle r="50" cy="100" cx="100" className='dark:stroke-white stroke-purple-700 stroke-[3px]' />
                 </svg>
               </div>
-              <input type="search" id="default-search" className="block w-full p-3 ps-10 text-[12px] text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Tweets" required />
-            </div>
-          </form>
+              :
+              <Tabs key={"full"} radius={"full"} aria-label="Tabs radius" defaultSelectedKey={"total"}>
+                <Tab key="new" title="Newly Added">
+                  <div className='flex justify-center p-1'>
+                    <Pagination
+                      color="secondary"
+                      showControls
+                      initialPage={1}
+                      siblings={1}
+                      total={Math.ceil(todayTweets?.length / 10)}
+                      page={page}
+                      onChange={(page: any) => setPage(page)}
+                    />
+                  </div>
+                  <Table className="flex justify-end" aria-label='UserTable' aria-labelledby='UserTable'>
+                    <TableHeader columns={columns}>
+                      {(column: any) => (
+                        <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className='text-center'>
+                          {column.name}
+                        </TableColumn>
+                      )}
+                    </TableHeader>
+                    <TableBody items={todayTweets?.slice(startIndex, endIndex)}>
+                      {(item: any) => (
+                        <TableRow key={item?._id} className='hover:dark:bg-purple-600 hover:bg-gray-300 border-b-1 dark:border-gray-500'>
+                          {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                  <div className='flex justify-center mb-8 p-1'>
+                    <Pagination
+                      color="secondary"
+                      showControls
+                      initialPage={1}
+                      siblings={1}
+                      total={Math.ceil(todayTweets?.length / 10)}
+                      page={page}
+                      onChange={(page: any) => setPage(page)}
+                    />
+                  </div>
+                </Tab>
 
-          <div className='flex flex-row gap-2'>
-            <Tabs key={"full"} radius={"full"} aria-label="Tabs radius">
-              <Tab key="new" title="Newly Added" />
-              <Tab key="total" title="Total" />
-            </Tabs>
-          </div>
-        </div>
-        {
-          loading ?
-            <div id="loading" className="flex justify-center items-center align-middle">
-              <svg viewBox="50 50 100 100" style={{ width: '5rem' }}>
-                <circle r="50" cy="100" cx="100" className='dark:stroke-white stroke-purple-700 stroke-[3px]' />
-              </svg>
-            </div>
-            :
-            pageTweet?.length > 0 &&
-            <Table className="flex justify-end h-full" aria-label='UserTable' aria-labelledby='UserTable'>
-              <TableHeader columns={columns}>
-                {(column: any) => (
-                  <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className='text-center'>
-                    {column.name}
-                  </TableColumn>
-                )}
-              </TableHeader>
-              <TableBody items={pageTweet}>
-                {(item: any) => (
-                  <TableRow key={item?._id} className='hover:dark:bg-purple-600 hover:bg-gray-300 border-b-1 dark:border-gray-500'>
-                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-        }
-        <div className="flex justify-center mb-8 p-1">
-          <Pagination
-            color="secondary"
-            showControls
-            initialPage={1}
-            siblings={1}
-            total={totalPage}
-            page={page}
-            onChange={(page: any) => setPage(page)}
-          />
+                <Tab key="total" title="Total">
+                  <div className='flex justify-center p-1'>
+                    <Pagination
+                      color="secondary"
+                      showControls
+                      initialPage={1}
+                      siblings={1}
+                      total={Math.ceil(tweetData?.length / 10)}
+                      page={page}
+                      onChange={(page: any) => setPage(page)}
+                    />
+                  </div>
+                  <Table className="flex justify-end" aria-label='UserTable' aria-labelledby='UserTable'>
+                    <TableHeader columns={columns}>
+                      {(column: any) => (
+                        <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"} className='text-center'>
+                          {column.name}
+                        </TableColumn>
+                      )}
+                    </TableHeader>
+                    <TableBody items={tweetData?.slice(startIndex, endIndex)}>
+                      {(item: any) => (
+                        <TableRow key={item?._id} className='hover:dark:bg-purple-600 hover:bg-gray-300 border-b-1 dark:border-gray-500'>
+                          {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                  <div className='flex justify-center mb-8 p-1'>
+                    <Pagination
+                      color="secondary"
+                      showControls
+                      initialPage={1}
+                      siblings={1}
+                      total={Math.ceil(tweetData?.length / 10)}
+                      page={page}
+                      onChange={(page: any) => setPage(page)}
+                    />
+                  </div>
+                </Tab>
+              </Tabs>
+          }
         </div>
       </div>
       <DeleteTweet />
