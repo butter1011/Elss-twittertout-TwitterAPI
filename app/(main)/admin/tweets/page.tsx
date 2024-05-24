@@ -130,7 +130,7 @@ const TweetsPage = () => {
               :
               <Tabs key={"full"} radius={"full"} aria-label="Tabs radius" defaultSelectedKey={"total"}>
                 <Tab key="new" title="Newly Added">
-                  <div className='flex justify-center p-1'>
+                  <div className='flex justify-center p-1 mb-2'>
                     <Pagination
                       color="secondary"
                       showControls
@@ -171,7 +171,7 @@ const TweetsPage = () => {
                 </Tab>
 
                 <Tab key="total" title="Total">
-                  <div className='flex justify-center p-1'>
+                  <div className='flex justify-center p-1 mb-2'>
                     <Pagination
                       color="secondary"
                       showControls
