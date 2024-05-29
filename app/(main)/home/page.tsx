@@ -54,7 +54,7 @@ export default function HomePage() {
                             </a>
                         </div>
                     </div>
-                    <div className="animate-fade-left animate-once animate-ease-out mt-20 lg:mt-0">
+                    <div className="flex justify-center animate-fade-left animate-once animate-ease-out mt-20 lg:mt-0">
                         <Image src={home_bg} alt="" width={600} height={600} className="rounded" priority />
                     </div>
                 </div>

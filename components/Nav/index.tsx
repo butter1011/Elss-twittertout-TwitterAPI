@@ -142,7 +142,7 @@ export default function App() {
             </NavbarContent>
             <NavbarContent justify="end" className="max-w-[30px]">
                 <NavbarContent className="lg:hidden" justify="center">
-                    <NavbarMenuToggle />
+                    <NavbarMenuToggle className="text-black dark:text-white"/>
                 </NavbarContent>
             </NavbarContent>
             <NavbarMenu className="flex gap-10 py-8">
