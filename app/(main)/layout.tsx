@@ -19,6 +19,7 @@ export default function RootLayout({
           <DataProvider>
             <TabMenuProvider>
               <StoreProvider>
+                {/* <DevTools /> */}
                 <div className="h-16 dark:bg-[#38117F] w-full z-40">
                   <Navbar />
                 </div>

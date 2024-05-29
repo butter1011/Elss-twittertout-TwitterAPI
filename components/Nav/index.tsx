@@ -48,7 +48,7 @@ export default function App() {
     useEffect(() => {
         if (session) setLoggedIn(session?.user)
         setMounted(true)
-    }, [])
+    }, [session])
 
     if (!mounted) return null
 
@@ -77,7 +77,7 @@ export default function App() {
                         Contact US
                     </Link>
                 </NavbarItem>
-                {user ?
+                {user || session?.user ? 
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('feeds') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/feeds">
                             Feeds
@@ -85,7 +85,7 @@ export default function App() {
                     </NavbarItem>
                     : <></>
                 }
-                {user ?
+                {user || session?.user ?
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('admin') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/admin/user">
                             Admin
@@ -140,11 +140,13 @@ export default function App() {
                     </>
                 }
             </NavbarContent>
+
             <NavbarContent justify="end" className="max-w-[30px]">
                 <NavbarContent className="lg:hidden" justify="center">
                     <NavbarMenuToggle className="text-black dark:text-white"/>
                 </NavbarContent>
             </NavbarContent>
+            
             <NavbarMenu className="flex gap-10 py-8">
                 {menuItems.map((item, index) => (
                     <NavbarMenuItem key={`${item}-${index}`}>
