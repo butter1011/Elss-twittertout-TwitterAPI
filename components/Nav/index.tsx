@@ -77,7 +77,7 @@ export default function App() {
                         Contact US
                     </Link>
                 </NavbarItem>
-                {user || session?.user ? 
+                {user? 
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('feeds') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/feeds">
                             Feeds
@@ -85,7 +85,7 @@ export default function App() {
                     </NavbarItem>
                     : <></>
                 }
-                {user || session?.user ?
+                {user?
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('admin') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/admin/user">
                             Admin
