@@ -8,7 +8,7 @@ const CardHeader: React.FC<any> = ({ tweet, img }) => {
                 <div className="flex w-full">
                     <div className="flex flex-row gap-4 justify-start">
                         <p className="font-bold text-black dark:text-white text-[12px] sm:text-[16px] text-ellipsis overflow-hidden">{tweet.user}</p>
-                        <Chip className="hidden sm:flex" color="secondary" size="sm">winrate</Chip>
+                        { tweet?.isCheck && <Chip className="hidden sm:flex" color="secondary" size="sm">winrate</Chip> }
                     </div>
                     <div className="gap-4 flex justify-end w-full">
                         <button className="dark:border-white border-black border text-[11px] sm:text-[12px] text-black dark:text-white bg-gray-50 dark:bg-gray-800 rounded-lg px-2 sm:px-4 py-1 active:scale-90" >Follow</button>
@@ -17,11 +17,11 @@ const CardHeader: React.FC<any> = ({ tweet, img }) => {
                 <p className="text-black dark:text-gray-400 text-[11px] sm:text-[14px]">
                     {new Date(tweet.postedAt)
                         .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-                        .replace(',', '') 
+                        .replace(',', '')
                         + ', '
                         + new Date(tweet.postedAt)
                             .toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-                            .replace(':', ':') 
+                            .replace(':', ':')
                             .replace('am', 'am')
                             .replace('pm', 'pm')
                     }

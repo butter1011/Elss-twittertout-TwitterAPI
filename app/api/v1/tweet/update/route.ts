@@ -7,7 +7,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
     await connect();
     const { tweetId, isCheck } = await request.json();
     const tweet = await Tweets.findOne({ _id: tweetId });
-    console.log("---------------");
 
     if (!tweet) {
       return NextResponse.json({ status: 404, message: "Tweet Not Found!" });
