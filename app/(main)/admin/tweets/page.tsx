@@ -109,11 +109,11 @@ const TweetsPage = () => {
               }
               <PopoverContent>
                 <div className="flex flex-row gap-4">
-                  <Button onClick={() => { alert(tweet._id); CheckTweet(tweet._id, true); }}>
+                  <Button onClick={() => { CheckTweet(tweet._id, true); }}>
                     <FaCheck className='text-green-500' />
                   </Button>
 
-                  <Button onClick={() => { alert(tweet._id); CheckTweet(tweet._id, false); }}>
+                  <Button onClick={() => { CheckTweet(tweet._id, false); }}>
                     <RxCross2 className='text-red-500 text-[18px]' />
                   </Button>
                 </div>
