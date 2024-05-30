@@ -1,17 +1,23 @@
 "use client"
 import React, { useEffect, useState } from 'react'
+import CountUp from 'react-countup';
+
+import axios from 'axios';
+
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Avatar, Chip, Tooltip, getKeyValue, Button } from "@nextui-org/react";
 import { Pagination } from "@nextui-org/react";
+import { Divider } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
+import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
+import { FaCheck } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import { GoPlus, GoNote, GoEye, GoTrash } from "react-icons/go";
-import CountUp from 'react-countup';
+
 import { tweetUsers, tweetsList } from "@/components/Jotai/atoms";
-import axios from 'axios';
+import DeleteTweet from '@/components/UI/Modals/DeleteTweet';
 
 import { useAtom } from 'jotai';
 import { isAddOpen, isDeleteOpen } from '@/components/Jotai/modalAtoms';
-import { Divider } from "@nextui-org/react";
-import DeleteTweet from '@/components/UI/Modals/DeleteTweet';
-import { Tabs, Tab } from "@nextui-org/react";
 
 const columns = [
   { name: "UserName", uid: "user" },
@@ -20,13 +26,14 @@ const columns = [
   { name: "Action", uid: "actions" },
 ];
 
-
 const TweetsPage = () => {
   const [page, setPage] = useState(1);
-  const [, setDeleteModalOpen] = useAtom(isDeleteOpen);
   const [loading, setLoading] = useState<any>(false);
-  const [tweetData, setTweetData] = useAtom(tweetsList);
   const [todayTweets, setTodayTweets] = useState([]);
+  const [tweets, setGetTweets] = useState(false);
+
+  const [tweetData, setTweetData] = useAtom(tweetsList);
+  const [, setDeleteModalOpen] = useAtom(isDeleteOpen);
 
   // Page info
   const tweetsPerPage = 10;
@@ -44,7 +51,13 @@ const TweetsPage = () => {
     };
 
     getTweets();
-  }, []);
+  }, [tweets]);
+
+  const CheckTweet = async function (tweetId: any, isCheck: any) {
+    await axios.post("/api/v1/tweet/update", { tweetId, isCheck }).then((res) => {
+      setGetTweets(!tweets);
+    });
+  }
 
   const renderCell = React.useCallback((tweet: any, columnKey: any) => {
     const cellValue = tweet[columnKey];
@@ -84,11 +97,28 @@ const TweetsPage = () => {
                 <GoEye />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user" className='text-black dark:text-white'>
-              <span className="text-lg text-black dark:text-white cursor-pointer active:opacity-50">
-                <GoNote />
-              </span>
-            </Tooltip>
+            <Popover key={"top"} placement={"top"} color="default">
+              {
+                tweet?.isCheck !== undefined ?
+                  (tweet?.isCheck ? <FaCheck className='text-green-500' /> : <RxCross2 className='text-red-500 text-[18px]' />) :
+                  <PopoverTrigger>
+                    <span className="text-lg text-black dark:text-white cursor-pointer active:opacity-50">
+                      <GoNote />
+                    </span>
+                  </PopoverTrigger>
+              }
+              <PopoverContent>
+                <div className="flex flex-row gap-4">
+                  <Button onClick={() => { alert(tweet._id); CheckTweet(tweet._id, true); }}>
+                    <FaCheck className='text-green-500' />
+                  </Button>
+
+                  <Button onClick={() => { alert(tweet._id); CheckTweet(tweet._id, false); }}>
+                    <RxCross2 className='text-red-500 text-[18px]' />
+                  </Button>
+                </div>
+              </PopoverContent>
+            </Popover>
             <Tooltip color="danger" content="Delete user">
               <span className="text-lg text-danger cursor-pointer active:opacity-50" onClick={() => setDeleteModalOpen(tweet._id)}>
                 <GoTrash />

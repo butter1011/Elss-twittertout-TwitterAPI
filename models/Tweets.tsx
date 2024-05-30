@@ -9,6 +9,7 @@ const TweetsSchema = new Schema(
     attachments: { type: Array },
     entities: { type: Array },
     publicMetrics: { type: Object },
+    isCheck: { type: Boolean },
   },
 );
 

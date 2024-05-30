@@ -1,13 +1,17 @@
 'use client'
 import React, { useState } from 'react'
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
-import { GoPerson } from "react-icons/go";
-import { isAddOpen } from '@/components/Jotai/modalAtoms';
 import { useContext } from 'react';
-import { ToastContext } from '@/components/Contexts/ToastContext';
 import axios from 'axios';
+
+import { ToastContext } from '@/components/Contexts/ToastContext';
+
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
+
 import { useAtom } from 'jotai';
+import { isAddOpen } from '@/components/Jotai/modalAtoms';
 import { tweetUsers } from '@/components/Jotai/atoms';
+
+import { GoPerson } from "react-icons/go";
 
 const AddUser = () => {
     const [isOpen, setOpen] = useAtom(isAddOpen);
