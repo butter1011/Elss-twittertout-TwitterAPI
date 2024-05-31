@@ -178,16 +178,6 @@ export default function App() {
             <NavbarMenu className="flex gap-10 py-8">
                 {menuItems.map((item, index) => (
                     <NavbarMenuItem key={`${index}+${item.toLowerCase()}`} className="flex flex-col gap-2">
-                        {item === "Login" && user.role === "admin" ?
-                            <Link
-                                className="w-full text-black dark:text-white text-[28px] font-bold flex flex-col"
-                                href={'/admin/user'}
-                                size="lg"
-                            >
-                                Admin
-                            </Link>
-                            : <></>
-                        }
                         {item === "Login" && user ?
                             <Link
                                 className="w-full text-black dark:text-white text-[28px] font-bold flex flex-col"
@@ -207,6 +197,16 @@ export default function App() {
                             >
                                 {item}
                             </Link>
+                        }
+                        {item === "Login" && user.role === "admin" ?
+                            <Link
+                                className="w-full text-black dark:text-white text-[28px] font-bold flex flex-col py-8"
+                                href={'/admin/user'}
+                                size="lg"
+                            >
+                                Admin
+                            </Link>
+                            : <></>
                         }
                     </NavbarMenuItem>
                 ))}
