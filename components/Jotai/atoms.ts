@@ -1,28 +1,7 @@
-import { verifyJwtToken } from "@/libs/auth";
+
 import { atom } from "jotai";
-import Cookies from "universal-cookie";
-
-const initLoginState = async () => {
-  const cookies = new Cookies();
-  const token = cookies.get("token");
-  const user_storage = localStorage.getItem('user');
-  
-  if(token) {
-    const verifiedToken = await verifyJwtToken(token);
-    if(verifiedToken){
-      return verifiedToken;
-    }
-  }
-
-  if(user_storage) {
-    return JSON.parse(user_storage);
-  }
-  
-  return false;
-}
 
 export const articleAtoms = atom<any>([]);
-export const isLoggedInAtom = atom<any>(initLoginState());
 export const groupText = atom<any>("");
 export const groupName = atom<any>("");
 export const groupFile = atom<any>(null);
@@ -35,7 +14,6 @@ export const tweetUsers = atom<any>([]);
 export const tweetsList = atom<any>([]);
 
 articleAtoms.debugLabel = "articleAtoms";
-isLoggedInAtom.debugLabel = "isLoggedInAtom";
 groupText.debugLabel = "groupText";
 groupName.debugLabel = "groupName";
 groupFile.debugLabel = "groupFile";

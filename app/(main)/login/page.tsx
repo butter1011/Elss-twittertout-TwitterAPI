@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { signIn } from 'next-auth/react';
 import { FaGoogle } from "react-icons/fa6";
 import { useAtom } from "jotai";
-import { isLoggedInAtom } from "@/components/Jotai/atoms";
 
 const Signin = () => {
   const [email, setEmail] = useState<any>("");
@@ -15,7 +14,6 @@ const Signin = () => {
   const [loading, setLoading] = useState<any>(false);
   const { toast } = useContext<any>(ToastContext);
   const router = useRouter();
-  const [user, setLoggedIn] = useAtom(isLoggedInAtom);
 
   const handleSignin = async ()=>{
     if(email && password){
