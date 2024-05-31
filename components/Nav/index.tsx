@@ -21,7 +21,6 @@ export default function App() {
     const { data: session } = useSession();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
-    const [mounted, setMounted] = useState(false)
     const { theme, setTheme } = useTheme()
 
     const menuItems = [
@@ -44,6 +43,7 @@ export default function App() {
         const cookies = new Cookies();
         cookies.remove('token', { path: '/' });
         signOut();
+        localStorage.removeItem('user');
         setLoggedIn(false);
     }
 
@@ -52,15 +52,12 @@ export default function App() {
         const getUserData = async () => {
             await axios.post('/api/v2/userfind', { email: session?.user?.email }).then((res) => {
                 setLoggedIn(res?.data?.user[0]);
+                localStorage.setItem('user', JSON.stringify(res?.data?.user[0]));
             });
         }
 
         if (session) getUserData();
-
-        setMounted(true)
     }, [session])
-
-    if (!mounted) return null
 
     return (
         <Navbar maxWidth="full" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} className="bg-white dark:bg-[#38117F]">
@@ -163,10 +160,7 @@ export default function App() {
                         {item === "Login" && user.role === "admin" ?
                             <NavbarMenuItem key={`${item}-${index}`}>
                                 <Link
-                                    className="w-full text-[28px] font-bold flex flex-col"
-                                    color={
-                                        index === menuItems.length - 1 ? "primary" : "foreground"
-                                    }
+                                    className="w-full text-black dark:text-white text-[28px] font-bold flex flex-col"
                                     href={'/admin/user'}
                                     size="lg"
                                 >
@@ -178,10 +172,7 @@ export default function App() {
                         <NavbarMenuItem key={`${item}-${index}`}>
                             {item === "Login" && user ?
                                 <Link
-                                    className="w-full text-[28px] font-bold flex flex-col"
-                                    color={
-                                        index === menuItems.length - 1 ? "primary" : "foreground"
-                                    }
+                                    className="w-full text-black dark:text-white text-[28px] font-bold flex flex-col"
                                     href={`/feeds`}
                                     size="lg"
                                 >

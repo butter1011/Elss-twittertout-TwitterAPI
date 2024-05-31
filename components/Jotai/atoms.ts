@@ -5,6 +5,7 @@ import Cookies from "universal-cookie";
 const initLoginState = async () => {
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const user_storage = localStorage.getItem('user');
   
   if(token) {
     const verifiedToken = await verifyJwtToken(token);
@@ -12,6 +13,11 @@ const initLoginState = async () => {
       return verifiedToken;
     }
   }
+
+  if(user_storage) {
+    return JSON.parse(user_storage);
+  }
+  
   return false;
 }
 
