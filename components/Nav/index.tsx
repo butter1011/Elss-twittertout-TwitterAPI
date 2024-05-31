@@ -91,7 +91,7 @@ export default function App() {
 
             <NavbarContent className="hidden lg:flex gap-6" justify="end">
                 <NavbarItem className="p-2">
-                    <Link href="#" color={`${pathname.includes('home') ? "warning" : "foreground"}`}>
+                    <Link href="/home" color={`${pathname.includes('home') ? "warning" : "foreground"}`}>
                         HOME
                     </Link>
                 </NavbarItem>
