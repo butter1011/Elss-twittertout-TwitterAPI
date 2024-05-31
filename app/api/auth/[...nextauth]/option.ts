@@ -20,6 +20,8 @@ export const options: any = {
           if (!existingUser) {
             const newUser = new Users({
               email: user.email,
+              image: user.image,
+              role: "user",
             });
             await newUser.save();
             return true

@@ -14,6 +14,8 @@ import { GoMoon } from "react-icons/go";
 import { GoSun } from "react-icons/go";
 import { LuBird } from "react-icons/lu";
 
+import axios from "axios";
+
 export default function App() {
     const [user, setLoggedIn] = useAtom(isLoggedInAtom);
     const { data: session } = useSession();
@@ -45,8 +47,16 @@ export default function App() {
         setLoggedIn(false);
     }
 
+
     useEffect(() => {
-        if (session) setLoggedIn(session?.user)
+        const getUserData = async () => {
+            await axios.post('/api/v2/userfind', { email: session?.user?.email }).then((res) => {
+                setLoggedIn(res?.data?.user[0]);
+            });
+        }
+
+        if (session) getUserData();
+
         setMounted(true)
     }, [session])
 
@@ -77,7 +87,7 @@ export default function App() {
                         Contact US
                     </Link>
                 </NavbarItem>
-                {user? 
+                {user ?
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('feeds') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/feeds">
                             Feeds
@@ -85,7 +95,7 @@ export default function App() {
                     </NavbarItem>
                     : <></>
                 }
-                {user?
+                {user?.role === "admin" ?
                     <NavbarItem className="p-2">
                         <Link className={`${pathname.includes('admin') ? "text-orange-500 font-bold" : "text-black dark:text-white"}`} href="/admin/user">
                             Admin
@@ -143,37 +153,54 @@ export default function App() {
 
             <NavbarContent justify="end" className="max-w-[30px]">
                 <NavbarContent className="lg:hidden" justify="center">
-                    <NavbarMenuToggle className="text-black dark:text-white"/>
+                    <NavbarMenuToggle className="text-black dark:text-white" />
                 </NavbarContent>
             </NavbarContent>
-            
+
             <NavbarMenu className="flex gap-10 py-8">
                 {menuItems.map((item, index) => (
-                    <NavbarMenuItem key={`${item}-${index}`}>
-                        {item === "Login" && user ?
-                            <Link
-                                className="w-full text-[28px] font-bold flex flex-col"
-                                color={
-                                    index === menuItems.length - 1 ? "primary" : "foreground"
-                                }
-                                href={`/feeds`}
-                                size="lg"
-                            >
-                                Feeds
-                            </Link>
-                            :
-                            <Link
-                                className="w-full text-[28px] font-bold flex flex-col"
-                                color={
-                                    index === menuItems.length - 1 ? "primary" : "foreground"
-                                }
-                                href={`/${item.toLowerCase()}`}
-                                size="lg"
-                            >
-                                {item}
-                            </Link>
+                    <>
+                        {item === "Login" && user.role === "admin" ?
+                            <NavbarMenuItem key={`${item}-${index}`}>
+                                <Link
+                                    className="w-full text-[28px] font-bold flex flex-col"
+                                    color={
+                                        index === menuItems.length - 1 ? "primary" : "foreground"
+                                    }
+                                    href={'/admin/user'}
+                                    size="lg"
+                                >
+                                    Admin
+                                </Link>
+                            </NavbarMenuItem>
+                            : <></>
                         }
-                    </NavbarMenuItem>
+                        <NavbarMenuItem key={`${item}-${index}`}>
+                            {item === "Login" && user ?
+                                <Link
+                                    className="w-full text-[28px] font-bold flex flex-col"
+                                    color={
+                                        index === menuItems.length - 1 ? "primary" : "foreground"
+                                    }
+                                    href={`/feeds`}
+                                    size="lg"
+                                >
+                                    Feeds
+                                </Link>
+                                :
+                                <Link
+                                    className="w-full text-[28px] font-bold flex flex-col"
+                                    color={
+                                        index === menuItems.length - 1 ? "primary" : "foreground"
+                                    }
+                                    href={`/${item.toLowerCase()}`}
+                                    size="lg"
+                                >
+                                    {item}
+                                </Link>
+                            }
+                        </NavbarMenuItem>
+                    </>
                 ))}
             </NavbarMenu>
         </Navbar>
